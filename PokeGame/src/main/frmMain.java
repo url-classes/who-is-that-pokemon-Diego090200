@@ -22,7 +22,11 @@ import javax.swing.ImageIcon;
  */
 public class frmMain extends javax.swing.JFrame {
     
-    Pokemon whoIsThatPokemon; // objeto de la clase que hace match con los datos de la API
+    Pokemon whoIsThatPokemon;
+    Pokemon whoIsThatPokemon2;
+    Pokemon whoIsThatPokemon3;
+    Pokemon whoIsThatPokemon4;// objeto de la clase que hace match con los datos de la API
+    
     Pokedex dexter = new Pokedex();
     PokeViewer visor = new PokeViewer();
     Reloj horaActual = new Reloj();
@@ -33,8 +37,8 @@ public class frmMain extends javax.swing.JFrame {
     public frmMain() {
         initComponents();
         horaActual.start();
+
     }
-    
     public class PokeViewer {
         public void mostrarSprites() {
             if (whoIsThatPokemon != null){
@@ -67,6 +71,47 @@ public class frmMain extends javax.swing.JFrame {
         }
     }
 
+    public class Hilo extends Thread {
+	public int button = 0;
+	public boolean run = false;
+        
+        //Iniciar hilo
+	public void startRunning(){
+	run = true;
+	}
+        
+        //Detener Hilo
+	public void stopRunning(){
+	run = false;
+	}
+        
+        
+        //Correr hilos
+        @Override
+        public void run() {
+            Image img;
+            //Ventana 1, colocar imagenes random en boton 1
+            while (button == 1) {
+                while (run) {
+                    //code
+                    try {
+                        whoIsThatPokemon = dexter.buscarPokemon();
+                        btnPokemon1.setText(whoIsThatPokemon.getName());
+                        whoIsThatPokemon2 = dexter.buscarPokemon();
+                        btnPokemon1.setText(whoIsThatPokemon2.getName());
+                        whoIsThatPokemon3 = dexter.buscarPokemon();
+                        btnPokemon1.setText(whoIsThatPokemon3.getName());
+                        whoIsThatPokemon4 = dexter.buscarPokemon();
+                        btnPokemon1.setText(whoIsThatPokemon4.getName());
+                        
+                    } catch (IOException | InterruptedException ex) {
+                        Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,6 +136,11 @@ public class frmMain extends javax.swing.JFrame {
         lblSprite.setText("?");
 
         btnPokemon1.setText("???");
+        btnPokemon1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPokemon1ActionPerformed(evt);
+            }
+        });
 
         btnPokemon2.setText("???");
 
@@ -166,18 +216,13 @@ public class frmMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJugarActionPerformed
-        try {
-            whoIsThatPokemon = dexter.buscarPokemon();
-            btnPokemon1.setText(whoIsThatPokemon.getName());
-            btnPokemon2.setText(whoIsThatPokemon.getName());
-            btnPokemon3.setText(whoIsThatPokemon.getName());
-            btnPokemon4.setText(whoIsThatPokemon.getName());
-            visor.mostrarSprites();
-        } catch (IOException | InterruptedException ex) {
-            Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        visor.mostrarSprites();
         btnJugar.setText("Jugar de nuevo");
     }//GEN-LAST:event_btnJugarActionPerformed
+
+    private void btnPokemon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPokemon1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPokemon1ActionPerformed
 
     /**
      * @param args the command line arguments
